@@ -69,6 +69,51 @@ class ColaPacientes {
         System.out.println("Atendiendo paciente: " + cabeza.paciente);
         cabeza = cabeza.siguiente;
     }
+
+    public void buscarPacientePorID(int id) {
+    if (cabeza == null) {
+        System.out.println("La sala de emergencias está vacía.");
+        return;
+    }
+
+    NodoPaciente actual = cabeza;
+    while (actual != null) {
+        if (actual.paciente.id == id)
+ {          System.out.println("Paciente encontrado:");
+            System.out.println(actual.paciente);
+            return;
+        }
+        actual = actual.siguiente;
+    }
+    System.out.println("No se encontró ningún paciente con la ID proporcionada.");
+    }
+
+    public void eliminarPacientePorID(int id) {
+    if (cabeza == null) {
+        System.out.println("No hay pacientes en la sala.");
+        return;
+    }
+
+    if (cabeza.paciente.id == id) {
+        System.out.println("Paciente eliminado: " + cabeza.paciente);
+        cabeza = cabeza.siguiente;
+        return;
+    }
+
+    NodoPaciente actual = cabeza;
+    while (actual.siguiente != null) {
+        if (actual.siguiente.paciente.id == id) {
+            System.out.println("Paciente eliminado: " + actual.siguiente.paciente);
+            actual.siguiente = actual.siguiente.siguiente;
+            return;
+        }
+        actual = actual.siguiente;
+    }
+
+    System.out.println("No se encontró ningún paciente con la ID proporcionada.");
+}
+
+
 }
 
 class Utilidades {
@@ -90,7 +135,9 @@ public class SaladeEmergencias {
             System.out.println("1. Agregar paciente");
             System.out.println("2. Mostrar pacientes en espera");
             System.out.println("3. Atender siguiente paciente");
-            System.out.println("4. Salir");
+            System.out.println("4. Buscar paciente por ID");
+            System.out.println("5. Eliminar paciente por ID");
+            System.out.println("6. Salir");
             System.out.print("Seleccione una opción: ");
 
             try {
@@ -145,6 +192,30 @@ public class SaladeEmergencias {
                     break;
 
                 case 4:
+                    limpiarConsola();
+                    System.out.print("Ingrese la ID del paciente a buscar: ");
+                    try {
+                        int idBuscar = Integer.parseInt(scanner.nextLine().trim());
+                        cola.buscarPacientePorID(idBuscar);
+                    } catch (NumberFormatException e) {
+                        System.out.println("ID inválida. Debe ser un número.");
+                    }
+                    Utilidades.presioneEnterParaContinuar(scanner);
+                    break;
+
+                case 5:
+                    limpiarConsola();
+                    System.out.print("Ingrese la ID del paciente a eliminar: ");
+                    try {
+                        int idEliminar = Integer.parseInt(scanner.nextLine().trim());
+                        cola.eliminarPacientePorID(idEliminar);
+                    } catch (NumberFormatException e) {
+                        System.out.println("ID inválida. Debe ser un número.");
+                    }
+                    Utilidades.presioneEnterParaContinuar(scanner);
+                    break;
+
+                case 6:
                     System.out.println("Saliendo del sistema. ¡Hasta pronto!");
                     break;
 
@@ -152,7 +223,7 @@ public class SaladeEmergencias {
                     System.out.println("Opción inválida.");
                     Utilidades.presioneEnterParaContinuar(scanner);
             }
-        } while (opcion != 4);
+        } while (opcion != 6);
 
         scanner.close();
     }
